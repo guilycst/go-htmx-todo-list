@@ -13,10 +13,11 @@ type Index struct {
 	Title   string
 	Header  string
 	Content string
+	Test    string
 }
 
 func main() {
-	templatePattern := templateDir + "*.htmx"
+	templatePattern := templateDir + "*.html"
 
 	tmpl, err := template.ParseGlob(templatePattern)
 	if err != nil {
@@ -26,7 +27,7 @@ func main() {
 	// Define an HTTP handler function to render the templates
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		// Execute the template with the provided data
-		err := tmpl.ExecuteTemplate(w, "index.htmx", Index{
+		err := tmpl.ExecuteTemplate(w, "index.html", Index{
 			Title:   "A title",
 			Header:  "A header",
 			Content: "Some content",

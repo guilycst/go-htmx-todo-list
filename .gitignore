@@ -22,3 +22,6 @@ go.work
 
 #Distribution files folder
 dist
+
+#Temporary directory used by air
+tmp
