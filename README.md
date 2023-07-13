@@ -21,7 +21,7 @@ Most of the code in Go is a TCP server to handle the HTTP requests made from the
 
 HTMX can use those HTML reponses to dinamically swap parts of the page without the need of reloading the whole page (like a traditional form submit would do). This enables the app to have interactivity similar to JavaScript Frameworks/Libraries but without the need to actually write (as much) JavaScript.
 
-To page styling is handled by the Tailwind CSS Standalone CLI, it will process the .hmtl files at ./templates a generate a resulting CSS file at ./dist/output.css that is also served by the Go server.
+The page styling is handled by the Tailwind CSS Standalone CLI, it will process the .hmtl files at ./templates a generate a resulting CSS file at ./dist/output.css that is also served by the Go server.
 
 # How to run
 
