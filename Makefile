@@ -1,5 +1,8 @@
-run:
+run_dev:
 	air
+run:
+	make build
+	./tmp/main.exe
 build:
 	make tailwind
 	go build -o ./tmp/main.exe
