@@ -1,0 +1,25 @@
+<ul class="divide-y divide-gray-200 px-4" id="list">
+    {{range .}}
+
+    <li class="py-4">
+        <div class="flex items-center">
+            {{ if .Done }}
+            <input id="{{.Id}}" name="todo1" type="checkbox"
+                class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded" hx-post="/undone/{{.Id}}" hx-target="#list" hx-swap="outerHTML" checked>
+                <label for="{{.Id}}" class="ml-3 block text-gray-900">
+                    <span class="text-lg font-medium line-through">{{.Title}}</span>
+                    <span class="text-sm font-light text-gray-500 line-through">{{.Description}}</span>
+                </label>
+            {{else}}
+            <input id="{{.Id}}" name="todo1" type="checkbox"
+                class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded" hx-post="/done/{{.Id}}" hx-target="#list" hx-swap="outerHTML">
+                <label for="{{.Id}}" class="ml-3 block text-gray-900">
+                    <span class="text-lg font-medium">{{.Title}}</span>
+                    <span class="text-sm font-light text-gray-500">{{.Description}}</span>
+                </label>
+            {{end}}
+        </div>
+    </li>
+
+    {{end}}
+</ul>
