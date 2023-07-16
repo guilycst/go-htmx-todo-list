@@ -17,7 +17,7 @@ func (s *TodoService) FindById(id uint) *models.TodoItem {
 
 func (s *TodoService) All() []models.TodoItem {
 	var items []models.TodoItem
-	s.db.Find(&items)
+	s.db.Order("done asc").Find(&items)
 	return items
 }
 
