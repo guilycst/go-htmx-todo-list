@@ -1,15 +1,13 @@
 {{ $action := printf "/done/%d" .ID }}
 {{ $checked := "" }}
 {{ $lineThrough := "" }}
-{{ $move := "" }}
 {{ if .Done}}
 {{ $action = printf "/undone/%d" .ID }}
 {{ $checked = "checked" }}
 {{ $lineThrough = "line-through" }}
-{{ $move = "hxe-mv-to-append=\"start\"" }}
 {{end}}
 
-<li class="py-4" id="list-item-{{.ID}}" hx-ext="hxe-mv-to" hxe-mv-to-target="#list" {{$move|attr}}>
+<li class="py-4" id="list-item-{{.ID}}">
     <div class="flex items-center">
         <input id="list-item-check-{{.ID}}" name="todo1" type="checkbox"
             class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded" hx-post="{{$action}}"

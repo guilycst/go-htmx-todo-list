@@ -23,23 +23,11 @@ func init() {
 	//Parse templates
 	templatePattern := templateDir + "*.html"
 
-	var templates = template.New("")
-	funcMap := template.FuncMap{
-		"attr": func(s string) template.HTMLAttr {
-			return template.HTMLAttr(s)
-		},
-		"safe": func(s string) template.HTML {
-			return template.HTML(s)
-		},
-	}
-	templates.Funcs(funcMap)
-	templates, err := templates.ParseGlob(templatePattern)
+	templates, err := template.ParseGlob(templatePattern)
 	if err != nil {
 		log.Fatal(err)
 	}
 	tmpl = templates
-
-	tmpl.Funcs(funcMap)
 
 	//Open database conn and run migration
 	db = openDBConn()
