@@ -25,4 +25,5 @@ func Start(srv *services.TodoService, tmp *template.Template) {
 	http.HandleFunc("/update/", update)
 	http.HandleFunc("/dist/", fileServerHandler)
 	http.HandleFunc("/assets/", fileServerHandler)
+	http.HandleFunc("/js/", fileServerHandler)
 }
