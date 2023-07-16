@@ -1,6 +1,8 @@
 run_dev:
+	docker compose up -d
 	air
 run:
+	docker compose up -d
 	make build
 	./tmp/main.exe
 build:

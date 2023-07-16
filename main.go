@@ -4,43 +4,23 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"sync/atomic"
+
+	"github.com/guilycst/go-htmx/handlers"
+	"github.com/guilycst/go-htmx/models"
+	"github.com/guilycst/go-htmx/services"
+	"gorm.io/gorm"
 )
 
 const templateDir = "templates/"
 
 var (
-	idc  uint32
-	tmpl *template.Template
+	tmpl    *template.Template
+	db      *gorm.DB
+	service *services.TodoService
 )
 
-type TodoItem struct {
-	Id          uint32
-	Title       string
-	Description string
-	Done        bool
-}
-
-var todos []TodoItem = []TodoItem{
-	{
-		Id:          atomic.AddUint32(&idc, 1),
-		Title:       "Finish project proposal",
-		Description: "Due on 4/1/23",
-	},
-	{
-		Id:          atomic.AddUint32(&idc, 1),
-		Title:       "Buy groceries",
-		Description: "Bananas, milk, bread",
-		Done:        true,
-	},
-	{
-		Id:          atomic.AddUint32(&idc, 1),
-		Title:       "Go for a run",
-		Description: "3 miles",
-	},
-}
-
 func init() {
+	//Parse templates
 	templatePattern := templateDir + "*.html"
 
 	templates, err := template.ParseGlob(templatePattern)
@@ -48,12 +28,19 @@ func init() {
 		log.Fatal(err)
 	}
 	tmpl = templates
+
+	//Open database conn and run migration
+	db = openDBConn()
+	db.AutoMigrate(&models.TodoItem{})
+
+	//Initialize todo service
+	service = services.StartTodo(db)
+
+	//Initialize http handlers
+	handlers.Start(service, tmpl)
 }
 
 func main() {
-
-	//Initialize http handlers
-	initHandlers()
 
 	// Start the HTTP server
 	log.Println("Server started on http://localhost:8080")

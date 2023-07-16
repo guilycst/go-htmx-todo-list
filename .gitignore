@@ -25,3 +25,6 @@ dist
 
 #Temporary directory used by air
 tmp
+
+#postgres local volume
+pg-data
