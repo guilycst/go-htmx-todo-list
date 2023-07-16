@@ -7,7 +7,7 @@ A modest todo list app built with Go, HTMX and Tailwind CSS. The primary objecti
 
 - Create, Read, Update and Delete tasks
 - Complete tasks
-- Data is stored in memory
+- Data is stored in memory on the server
 
 # Dependencies
 - go 1.19
