@@ -1,0 +1,24 @@
+{{ $action := printf "/done/%d" .Id }}
+{{ $checked := "" }}
+{{ $lineThrough := "" }}
+{{ if .Done}}
+{{ $action = printf "/undone/%d" .Id }}
+{{ $checked = "checked" }}
+{{ $lineThrough = "line-through" }}
+{{end}}
+
+<li class="py-4" id="list-item-{{.Id}}">
+    <div class="flex items-center">
+        <input id="list-item-check-{{.Id}}" name="todo1" type="checkbox"
+            class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded" hx-post="{{$action}}"
+            hx-target="#list" hx-swap="outerHTML" {{$checked}}>
+        <label for="list-item-check-{{.Id}}" class="ml-3 block text-gray-900 grow">
+            <span class="text-lg font-medium {{$lineThrough}}">{{.Title}}</span>
+            <span class="text-sm font-light text-gray-500 {{$lineThrough}}">{{.Description}}</span>
+        </label>
+        <div>
+            <button hx-get="/edit/{{.Id}}" hx-target="#list-item-{{.Id}}" hx-swap="outerHTML">✏️</button>
+            <button hx-delete="/delete/{{.Id}}" hx-target="#list-item-{{.Id}}" hx-swap="delete">❌</button>
+        </div>
+    </div>
+</li>
