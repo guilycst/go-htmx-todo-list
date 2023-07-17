@@ -7,21 +7,24 @@ A modest todo list app built with Go, HTMX and Tailwind CSS. The primary objecti
 
 - Create, Read, Update and Delete tasks
 - Complete tasks
-- Data is stored in memory on the server
+- Data is stored in PostgreSQL
 
 # Dependencies
 - go 1.19
 - make
 - tailwind (standalone cli)
 - air (live-reloading)
+- docker
 
 # Implementation details
 
 Most of the code in Go is a TCP server to handle the HTTP requests made from the HTMX library. Those requests, if successful, will execute a template (template/html package) and respond with a HTML document. 
 
-HTMX can use those HTML reponses to dinamically swap parts of the page without the need of reloading the whole page (like a traditional form submit would do). This enables the app to have interactivity similar to JavaScript Frameworks/Libraries but without the need to actually write (as much) JavaScript.
+HTMX can use those HTML reponses to dinamically swap parts of the page without the need of reloading the whole page (like a traditional form submit would do). This enables the app to have interactivity similar to many popular JS Frameworks/Libraries but without the need to actually write (as much) JavaScript.
 
-The page styling is handled by the Tailwind CSS Standalone CLI, it will process the .hmtl files at ./templates a generate a resulting CSS file at ./dist/output.css that is also served by the Go server.
+The page styling is handled by the Tailwind CSS Standalone CLI, it will process the .hmtl files at ./templates a generate a resulting CSS file at ./dist/output.css that is served by the Go server.
+
+Storage is handled by PostgreSQL running in a container.
 
 # How to run
 
