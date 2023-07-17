@@ -12,6 +12,11 @@ import (
 
 func openDBConn() *gorm.DB {
 	dsn := "host=localhost user=admin password=admin dbname=todo port=5432 sslmode=disable"
+	env := os.Getenv("PG_CONN_STR")
+	if env != "" {
+		dsn = env
+	}
+
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.New(log.New(os.Stdout, "\r\n", log.LstdFlags), logger.Config{
 			SlowThreshold:             200 * time.Millisecond,

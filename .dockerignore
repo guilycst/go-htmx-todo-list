@@ -1,0 +1,12 @@
+.git
+.vscode
+dist
+docs
+tmp
+pg-data
+Makefile
+Dockerfile
+docker-compose.yml
+.gitignore
+*.toml
+*.md

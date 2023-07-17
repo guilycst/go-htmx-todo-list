@@ -13,3 +13,13 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
       POSTGRES_DB: todo
+  
+  server:
+    depends_on:
+      - db
+    build: ./ 
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      PG_CONN_STR: "host=db user=admin password=admin dbname=todo port=5432 sslmode=disable"

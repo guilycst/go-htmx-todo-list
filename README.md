@@ -28,6 +28,12 @@ Storage is handled by PostgreSQL running in a container.
 
 # How to run
 
+If you have all the dependencies on your machine, simply run the command
+
 ```$ make run```
 
 In a browser visit  http://localhost:8080 
+
+You can also run the application on docker with compose
+
+```$ docker compose up```
