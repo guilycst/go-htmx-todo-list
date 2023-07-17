@@ -1,3 +1,17 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+.fade-me-out.htmx-swapping {
+    opacity: 0;
+    transition: opacity 0.25s ease-out;
+}
+
+.fade-me-in.htmx-added {
+    opacity: 0;
+}
+
+.fade-me-in {
+    opacity: 1;
+    transition: opacity 0.25s ease-out;
+}
