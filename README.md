@@ -18,7 +18,7 @@ A modest todo list app built with Go, HTMX and Tailwind CSS. The primary objecti
 
 # Implementation details
 
-Most of the code in Go is a TCP server to handle the HTTP requests made from the HTMX library. Those requests, if successful, will execute a template (template/html package) and respond with a HTML document. 
+Most of the code in Go is a HTTP server to handle the requests made from the HTMX library. Those requests, if successful, will execute a template (template/html package) and respond with a HTML document. 
 
 HTMX can use those HTML reponses to dinamically swap parts of the page without the need of reloading the whole page (like a traditional form submit would do). This enables the app to have interactivity similar to many popular JS Frameworks/Libraries but without the need to actually write (as much) JavaScript.
 
