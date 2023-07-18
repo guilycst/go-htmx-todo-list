@@ -1,0 +1,29 @@
+{{ $action := printf "/done/%d" .ID }}
+{{ $checked := "" }}
+{{ $lineThrough := "" }}
+{{ $prepend := false }}
+{{ if .Done}}
+{{ $action = printf "/undone/%d" .ID }}
+{{ $checked = "checked" }}
+{{ $lineThrough = "line-through" }}
+{{ $prepend = true }}
+{{end}}
+
+<li class="py-4 fade-me-out fade-me-in" id="list-item-{{.ID}}">
+    <div class="flex items-center">
+        <input id="list-item-check-{{.ID}}" name="todo1" type="checkbox"
+            class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded" hx-post="{{$action}}"
+            hx-target="#list-item-{{.ID}}" hx-swap="outerHTML settle:0.25s"
+            hx-on="htmx:afterRequest: moveElement('list-item-{{.ID}}', 'list', {{$prepend}})" {{$checked}}>
+        <label for="list-item-check-{{.ID}}" class="ml-3 block text-gray-900 grow">
+            <span class="text-lg font-medium {{$lineThrough}}">{{.Title}}</span>
+            <span class="text-sm font-light text-gray-500 {{$lineThrough}}">{{.Description}}</span>
+        </label>
+        <div>
+            <button title="Edit" class="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110"
+                hx-get="/edit/{{.ID}}" hx-target="#list-item-{{.ID}}" hx-swap="outerHTML settle:0.25s">✏️</button>
+            <button title="Delete" class="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110"
+                hx-delete="/delete/{{.ID}}" hx-target="#list-item-{{.ID}}" hx-swap="delete swap:0.25s">❌</button>
+        </div>
+    </div>
+</li>

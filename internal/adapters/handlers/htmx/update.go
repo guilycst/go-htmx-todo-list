@@ -1,18 +1,20 @@
-package handlers
+package htmx
 
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/guilycst/go-htmx/internal/core/services/todosrv"
 )
 
-func update(w http.ResponseWriter, r *http.Request) {
+func (hx *HTMXHandler) Update(w http.ResponseWriter, r *http.Request) {
 	raw, id, err := getIdFromPath(r)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("id \"%s\" is invalid", raw), http.StatusBadRequest)
 		return
 	}
 
-	found := service.FindById(id)
+	found := hx.srv.FindById(id)
 
 	if found == nil {
 		http.Error(w, fmt.Sprintf("id \"%d\" not found", id), http.StatusNotFound)
@@ -30,18 +32,19 @@ func update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	title := r.Form.Get("title")
-	description := r.Form.Get("description")
+	found.Title = r.Form.Get("title")
+	found.Description = r.Form.Get("description")
 
-	if title == "" {
-		http.Error(w, "title is required", http.StatusBadRequest)
+	err = hx.srv.Save(found)
+	if err != nil {
+		if err == todosrv.ErrorTitleRequired {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		} else {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 	}
 
-	found.Title = title
-	found.Description = description
-	service.Save(found)
-
-	err = tmpl.ExecuteTemplate(w, "list_item.html", *found)
+	err = hx.tmpl.ExecuteTemplate(w, "list_item.html", *found)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

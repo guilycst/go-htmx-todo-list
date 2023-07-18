@@ -10,3 +10,4 @@ docker-compose.yml
 .gitignore
 *.toml
 *.md
+.env

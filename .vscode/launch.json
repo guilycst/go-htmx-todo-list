@@ -5,11 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Package",
+            "name": "Launch server",
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "."
+            "program": "./cmd/server/main.go",
+            "args": ["C:\\Users\\T-GAMER\\Documents\\repos\\go-htmx\\.env"]
+        },
+        {
+            "name": "Launch populator",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "./cmd/populator/main.go",
+            "args": ["-file", "../../population.json", "../../.env"]
         }
     ]
 }

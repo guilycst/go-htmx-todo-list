@@ -1,11 +1,11 @@
-package handlers
+package htmx
 
 import (
 	"fmt"
 	"net/http"
 )
 
-func doneHandleFunc(done bool) func(w http.ResponseWriter, r *http.Request) {
+func (hx *HTMXHandler) DoneHandleFunc(done bool) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		raw, id, err := getIdFromPath(r)
 		if err != nil {
@@ -13,7 +13,7 @@ func doneHandleFunc(done bool) func(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		found := service.FindById(id)
+		found := hx.srv.FindById(id)
 
 		if found == nil {
 			http.Error(w, fmt.Sprintf("id \"%d\" not found", id), http.StatusNotFound)
@@ -21,9 +21,12 @@ func doneHandleFunc(done bool) func(w http.ResponseWriter, r *http.Request) {
 		}
 
 		found.Done = done
-		service.Save(found)
+		err = hx.srv.Save(found)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 
-		err = tmpl.ExecuteTemplate(w, "list_item.html", found)
+		err = hx.tmpl.ExecuteTemplate(w, "list_item.html", found)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

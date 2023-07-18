@@ -28,12 +28,43 @@ Storage is handled by PostgreSQL running in a container.
 
 # How to run
 
-If you have all the dependencies on your machine, simply run the command
+## Server
+Serves the HTMX app.
+
+In a browser visit  ***http://localhost:8080***
+
+### Without Docker
+
+ - Download the [Tailwind CSS Standalone CLI](https://tailwindcss.com/blog/standalone-cli) and setup in your PATH as **tailwind**
+ - Setup a PosgreSQL server: The connection string is passed as a ENV variable named **PG_CONN_STR**, ENV variables are defined in the [.env](./.env), look it up for reference
+
+Then run the Make file:
+
+```$ make run_l```
+
+### Docker Compose
+
+#### Source on host machine with live-reload, database on Docker
 
 ```$ make run```
 
-In a browser visit  http://localhost:8080 
-
-You can also run the application on docker with compose
+#### Everithing on Docker
 
 ```$ docker compose up```
+
+## Populator
+    
+Inserts the contents of [population.json](./population.json) file into the database
+
+### Without Docker
+
+ - Setup a PosgreSQL server: The connection string is passed as a ENV variable named **PG_CONN_STR**, ENV variables are defined in the [.env](./.env), look it up for reference
+
+ Then run the Make file:
+
+```$ make populate_l```
+
+
+### Docker Compose
+
+```$ make populate```

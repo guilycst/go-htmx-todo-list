@@ -1,0 +1,22 @@
+[
+    {
+        "Title": "Go for a run",
+        "Description": "3 miles",
+        "Done": false
+    },
+    {
+        "Title": "Finish project proposal",
+        "Description": "Due 16/07",
+        "Done": false
+    },
+    {
+        "Title": "Buy groceries",
+        "Description": "eggs, bacon and olive oil",
+        "Done": false
+    },
+    {
+        "Title": "Change project",
+        "Description": "Adhere to hexagonal architecture",
+        "Done": true
+    }
+]
