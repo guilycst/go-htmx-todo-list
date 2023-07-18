@@ -10,7 +10,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "./cmd/server/main.go",
-            "args": ["C:\\Users\\T-GAMER\\Documents\\repos\\go-htmx\\.env"]
+            "args": ["../../.env"]
         },
         {
             "name": "Launch populator",
