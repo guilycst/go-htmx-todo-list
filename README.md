@@ -10,21 +10,21 @@ A modest todo list app built with Go, HTMX and Tailwind CSS. The primary objecti
 - Data is stored in PostgreSQL
 
 # Dependencies
-- go 1.19
-- make
-- tailwind (standalone cli)
-- air (live-reloading)
-- docker
+- Go (1.19)
+- Make
+- Tailwind CSS Standalone CLI
+- Air (live-reloading)
+- Docker
 
 # Implementation details
 
-Most of the code in Go is a HTTP server to handle the requests made from the HTMX library. Those requests, if successful, will execute a template (template/html package) and respond with a HTML document. 
+The majority of Go code is dedicated to an HTTP server that manages requests from the HTMX library. When these requests are successful, they trigger the execution of an HTML template using Go's [html/template package](https://pkg.go.dev/html/template) and return an HTML document as a response.
 
-HTMX can use those HTML reponses to dinamically swap parts of the page without the need of reloading the whole page (like a traditional form submit would do). This enables the app to have interactivity similar to many popular JS Frameworks/Libraries but without the need to actually write (as much) JavaScript.
+HTMX leverages these HTML responses to dynamically replace parts of the page without requiring a full page reload. This approach enables the application to provide interactivity comparable to popular JavaScript frameworks/libraries, but with reduced reliance on actual JavaScript code.
 
-The page styling is handled by the Tailwind CSS Standalone CLI, it will process the .hmtl files at ./templates a generate a resulting CSS file at ./dist/output.css that is served by the Go server.
+The visual appearance of the page is managed using the Tailwind CSS framework. The Standalone CLI tool is responsible for compiling the *.html files found in the [./internal/web/templates/](./internal/web/templates/) directory and producing a CSS file [./dist/output.css](./dist/output.css). This generated CSS file is then served by the Go server.
 
-Storage is handled by PostgreSQL running in a container.
+For storage, a PostgreSQL database is utilized within a container.
 
 # How to run
 
