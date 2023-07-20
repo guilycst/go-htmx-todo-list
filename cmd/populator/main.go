@@ -6,14 +6,14 @@ import (
 	"log"
 	"os"
 
-	"github.com/guilycst/go-htmx/internal/adapters/repositories"
 	"github.com/guilycst/go-htmx/internal/core/domain"
 	"github.com/guilycst/go-htmx/internal/core/ports"
 	"github.com/guilycst/go-htmx/pkg/loadenv"
+	"github.com/guilycst/go-htmx/pkg/repo"
 )
 
 var population = []*domain.TodoItem{}
-var repository ports.Repository[domain.TodoItem]
+var repository ports.TodoRepository
 
 func init() {
 
@@ -41,15 +41,15 @@ func init() {
 	}
 
 	//Create new repository
-	var pgConnStr string = os.Getenv("PG_CONN_STR")
-	repository, err = repositories.NewTodoDBRepository[domain.TodoItem](pgConnStr)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	var connStr string = os.Getenv("CONN_STR")
+	var storage string = os.Getenv("STORAGE")
+	repo.GetRepo(storage, connStr, &repository)
 }
 
 func main() {
-	repository.SaveBatch(population)
+	err := repository.SaveBatch(population)
+	if err != nil {
+		log.Fatal(err)
+	}
 	log.Print("💾✔️ - Database populated!")
 }

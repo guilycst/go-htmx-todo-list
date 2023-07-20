@@ -12,14 +12,20 @@ func (hx *HTMXHandler) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	found := hx.srv.FindById(id)
+	found, err := hx.srv.FindById(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	if found == nil {
 		http.Error(w, fmt.Sprintf("id \"%d\" not found", id), http.StatusNotFound)
 		return
 	}
 
-	hx.srv.Delete(found)
+	if err = hx.srv.Delete(found); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 
 	w.WriteHeader(http.StatusAccepted)
 }

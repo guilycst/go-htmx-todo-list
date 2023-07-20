@@ -13,3 +13,11 @@ type TodoItem struct {
 	Description string
 	Done        bool
 }
+
+func (t TodoItem) GetTitle() string {
+	return t.Title
+}
+
+func (t *TodoItem) pGetTitle() string {
+	return t.Title
+}

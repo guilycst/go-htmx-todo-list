@@ -3,7 +3,7 @@ tmp_dir = "tmp"
 
 [build]
   args_bin = []
-  bin = "./tmp/main.exe"
+  bin = "./tmp/main.exe .turso.env"
   cmd = "make build"
   delay = 1000
   exclude_dir = ["dist", "tmp", "pg-data"]

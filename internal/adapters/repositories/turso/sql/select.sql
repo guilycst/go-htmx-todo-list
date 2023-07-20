@@ -1,0 +1,1 @@
+SELECT * FROM todo_item WHERE id = ?;

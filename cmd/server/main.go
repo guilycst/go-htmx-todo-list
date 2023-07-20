@@ -7,10 +7,11 @@ import (
 
 	"github.com/guilycst/go-htmx/internal/adapters/handlers/fileserver"
 	"github.com/guilycst/go-htmx/internal/adapters/handlers/htmx"
-	"github.com/guilycst/go-htmx/internal/adapters/repositories"
-	"github.com/guilycst/go-htmx/internal/core/domain"
+
+	"github.com/guilycst/go-htmx/internal/core/ports"
 	"github.com/guilycst/go-htmx/internal/core/services/todosrv"
 	"github.com/guilycst/go-htmx/pkg/loadenv"
+	"github.com/guilycst/go-htmx/pkg/repo"
 )
 
 func init() {
@@ -19,17 +20,16 @@ func init() {
 	loadenv.LoadEnv()
 
 	var (
-		pgConnStr string = os.Getenv("PG_CONN_STR")
-		tmplDir   string = os.Getenv("TEMPLATES_DIR")
-		distDir   string = os.Getenv("DIST_DIR")
-		pubDir    string = os.Getenv("PUB_DIR")
+		storage string = os.Getenv("STORAGE")
+		connStr string = os.Getenv("CONN_STR")
+		tmplDir string = os.Getenv("TEMPLATES_DIR")
+		distDir string = os.Getenv("DIST_DIR")
+		pubDir  string = os.Getenv("PUB_DIR")
 	)
 
 	//Create new repository
-	repository, err := repositories.NewTodoDBRepository[domain.TodoItem](pgConnStr)
-	if err != nil {
-		log.Fatal(err)
-	}
+	var repository ports.TodoRepository
+	repo.GetRepo(storage, connStr, &repository)
 
 	//Create service
 	srv := todosrv.New(repository)
