@@ -33,7 +33,7 @@ func (hx *HTMXHandler) AddHandleFunc(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	err = hx.tmpl.ExecuteTemplate(w, "list_item.html", item)
+	err = hx.tmpl.ExecuteTemplate(w, "list_item.html", ToView(item))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -18,8 +18,10 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/klauspost/compress v1.15.15 // indirect
 	github.com/libsql/sqlite-antlr4-parser v0.0.0-20230512205400-b2348f0d1196 // indirect
+	github.com/mattn/go-sqlite3 v1.14.17 // indirect
 	golang.org/x/crypto v0.8.0 // indirect
 	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
 	golang.org/x/text v0.9.0 // indirect
+	gorm.io/driver/sqlite v1.5.2 // indirect
 	nhooyr.io/websocket v1.8.7 // indirect
 )

@@ -23,7 +23,7 @@ func (hx *HTMXHandler) Edit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = hx.tmpl.ExecuteTemplate(w, "list_item_edit.html", *found)
+	err = hx.tmpl.ExecuteTemplate(w, "list_item_edit.html", ToView(*found))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

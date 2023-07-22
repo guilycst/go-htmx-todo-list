@@ -42,8 +42,13 @@ func init() {
 
 	//Create new repository
 	var connStr string = os.Getenv("CONN_STR")
-	var storage string = os.Getenv("STORAGE")
-	repo.GetRepo(storage, connStr, &repository)
+	var storage repo.Storage = repo.StorageFromString(os.Getenv("STORAGE"))
+	//Create new repository
+	pRepository, err := repo.GetRepo(storage, connStr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	repository = *pRepository
 }
 
 func main() {

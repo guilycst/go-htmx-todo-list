@@ -30,7 +30,7 @@ func (hx *HTMXHandler) DoneHandleFunc(done bool) func(w http.ResponseWriter, r *
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
-		err = hx.tmpl.ExecuteTemplate(w, "list_item.html", found)
+		err = hx.tmpl.ExecuteTemplate(w, "list_item.html", ToView(*found))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

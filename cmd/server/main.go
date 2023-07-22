@@ -8,7 +8,8 @@ import (
 	"github.com/guilycst/go-htmx/internal/adapters/handlers/fileserver"
 	"github.com/guilycst/go-htmx/internal/adapters/handlers/htmx"
 
-	"github.com/guilycst/go-htmx/internal/core/ports"
+	_ "time/tzdata"
+
 	"github.com/guilycst/go-htmx/internal/core/services/todosrv"
 	"github.com/guilycst/go-htmx/pkg/loadenv"
 	"github.com/guilycst/go-htmx/pkg/repo"
@@ -20,16 +21,18 @@ func init() {
 	loadenv.LoadEnv()
 
 	var (
-		storage string = os.Getenv("STORAGE")
-		connStr string = os.Getenv("CONN_STR")
-		tmplDir string = os.Getenv("TEMPLATES_DIR")
-		distDir string = os.Getenv("DIST_DIR")
-		pubDir  string = os.Getenv("PUB_DIR")
+		storage repo.Storage = repo.StorageFromString(os.Getenv("STORAGE"))
+		connStr string       = os.Getenv("CONN_STR")
+		tmplDir string       = os.Getenv("TEMPLATES_DIR")
+		distDir string       = os.Getenv("DIST_DIR")
+		pubDir  string       = os.Getenv("PUB_DIR")
 	)
 
 	//Create new repository
-	var repository ports.TodoRepository
-	repo.GetRepo(storage, connStr, &repository)
+	repository, err := repo.GetRepo(storage, connStr)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	//Create service
 	srv := todosrv.New(repository)

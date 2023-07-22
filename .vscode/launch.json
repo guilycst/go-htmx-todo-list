@@ -10,7 +10,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "./cmd/server/main.go",
-            "args": ["../../.turso.env"],
+            "args": ["../../.env"],
             "env": {
                 "DIST_DIR": "C:\\Users\\T-GAMER\\Documents\\repos\\go-htmx\\dist",
                 "PUB_DIR":  "C:\\Users\\T-GAMER\\Documents\\repos\\go-htmx\\internal\\web\\public"

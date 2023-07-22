@@ -13,7 +13,12 @@ func (hx *HTMXHandler) ListHandleFunc(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = hx.tmpl.ExecuteTemplate(w, "list.html", items)
+	viewItems := []todoItemView{}
+	for _, v := range items {
+		viewItems = append(viewItems, ToView(v))
+	}
+
+	err = hx.tmpl.ExecuteTemplate(w, "list.html", viewItems)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

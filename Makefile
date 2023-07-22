@@ -13,7 +13,7 @@ src:
 	cp -R ./internal/web/src/*.js ./dist/
 populate:
 	docker compose up -d db
-	go run cmd/populator/main.go -file population.json .turso.env
+	go run cmd/populator/main.go -file population.json .env
 	docker compose down
 populate_l:
-	go run cmd/populator/main.go -file population.json .turso.env
+	go run cmd/populator/main.go -file population.json .env

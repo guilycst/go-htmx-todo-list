@@ -72,8 +72,8 @@ func (s *service) Delete(item *domain.TodoItem) error {
 	return nil
 }
 
-func New(repository ports.TodoRepository) *service {
+func New(repository *ports.TodoRepository) *service {
 	return &service{
-		repository: repository,
+		repository: *repository,
 	}
 }

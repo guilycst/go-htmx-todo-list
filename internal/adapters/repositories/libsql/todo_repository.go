@@ -1,4 +1,4 @@
-package turso
+package libsql
 
 import (
 	"database/sql"
@@ -14,12 +14,13 @@ import (
 
 //go:embed sql
 var sqlFiles embed.FS
+var loc, _ = time.LoadLocation("America/Sao_Paulo")
 
-type TursoTodoDBRepository struct {
+type LibsqlTodoRepository struct {
 	db *sql.DB
 }
 
-func (r *TursoTodoDBRepository) getSQL(fileName string) (string, error) {
+func (r *LibsqlTodoRepository) getSQL(fileName string) (string, error) {
 	fb, err := sqlFiles.ReadFile(fmt.Sprintf("sql/%s", fileName))
 	if err != nil {
 		return "", err
@@ -29,7 +30,7 @@ func (r *TursoTodoDBRepository) getSQL(fileName string) (string, error) {
 	return sql, nil
 }
 
-func (r *TursoTodoDBRepository) FindById(id any) (*domain.TodoItem, error) {
+func (r *LibsqlTodoRepository) FindById(id any) (*domain.TodoItem, error) {
 	selc, err := r.getSQL("select.sql")
 	if err != nil {
 		return nil, err
@@ -47,12 +48,13 @@ func (r *TursoTodoDBRepository) FindById(id any) (*domain.TodoItem, error) {
 		}
 		return nil, err
 	}
-	item.CreatedAt, _ = time.Parse("2006-01-02 15:04:05", createdAt.String)
-	item.UpdatedAt, _ = time.Parse("2006-01-02 15:04:05", createdAt.String)
+
+	item.CreatedAt, _ = time.ParseInLocation("2006-01-02 15:04:05", createdAt.String, loc)
+	item.UpdatedAt, _ = time.ParseInLocation("2006-01-02 15:04:05", updatedAt.String, loc)
 	return &item, nil
 }
 
-func (r *TursoTodoDBRepository) All() ([]domain.TodoItem, error) {
+func (r *LibsqlTodoRepository) All() ([]domain.TodoItem, error) {
 	selc, err := r.getSQL("select_all.sql")
 	if err != nil {
 		return nil, err
@@ -75,16 +77,16 @@ func (r *TursoTodoDBRepository) All() ([]domain.TodoItem, error) {
 			return nil, err
 		}
 
-		item.CreatedAt, _ = time.Parse("2006-01-02 15:04:05", createdAt.String)
-		item.UpdatedAt, _ = time.Parse("2006-01-02 15:04:05", createdAt.String)
+		item.CreatedAt, _ = time.ParseInLocation("2006-01-02 15:04:05", createdAt.String, loc)
+		item.UpdatedAt, _ = time.ParseInLocation("2006-01-02 15:04:05", updatedAt.String, loc)
 		items = append(items, item)
 	}
 
 	return items, nil
 }
 
-func (r *TursoTodoDBRepository) Save(data *domain.TodoItem) error {
-	save, err := r.getSQL("insert_or_replace.sql")
+func (r *LibsqlTodoRepository) Save(data *domain.TodoItem) error {
+	save, err := r.getSQL("update.sql")
 	if err != nil {
 		return err
 	}
@@ -103,7 +105,7 @@ func (r *TursoTodoDBRepository) Save(data *domain.TodoItem) error {
 			String: data.DeletedAt.Format("2006-01-02 15:04:05"),
 		}
 	}
-	_, err = r.db.Exec(save, data.ID, deletedAt, data.Title, data.Description, done)
+	_, err = r.db.Exec(save, deletedAt, data.Title, data.Description, done, data.ID)
 	if err != nil {
 		return err
 	}
@@ -116,7 +118,7 @@ func (r *TursoTodoDBRepository) Save(data *domain.TodoItem) error {
 	return err
 }
 
-func (r *TursoTodoDBRepository) Create(data *domain.TodoItem) error {
+func (r *LibsqlTodoRepository) Create(data *domain.TodoItem) error {
 	save, err := r.getSQL("insert_or_replace.sql")
 	if err != nil {
 		return err
@@ -137,7 +139,7 @@ func (r *TursoTodoDBRepository) Create(data *domain.TodoItem) error {
 	return err
 }
 
-func (r *TursoTodoDBRepository) Delete(data *domain.TodoItem) error {
+func (r *LibsqlTodoRepository) Delete(data *domain.TodoItem) error {
 	save, err := r.getSQL("insert_or_replace.sql")
 	if err != nil {
 		return err
@@ -151,7 +153,7 @@ func (r *TursoTodoDBRepository) Delete(data *domain.TodoItem) error {
 	return err
 }
 
-func (r *TursoTodoDBRepository) SaveBatch(data []*domain.TodoItem) error {
+func (r *LibsqlTodoRepository) SaveBatch(data []*domain.TodoItem) error {
 	save, err := r.getSQL("insert_or_replace.sql")
 	if err != nil {
 		return err
@@ -198,7 +200,7 @@ func NewTodoDBRepository(connStr string) (ports.TodoRepository, error) {
 
 	log.Printf("Turso connection OK!")
 
-	var repo = &TursoTodoDBRepository{
+	var repo = &LibsqlTodoRepository{
 		db: db,
 	}
 

@@ -4,6 +4,7 @@ import (
 	"embed"
 	"html/template"
 
+	"github.com/guilycst/go-htmx/internal/core/domain"
 	"github.com/guilycst/go-htmx/internal/core/ports"
 )
 
@@ -15,9 +16,35 @@ type HTMXHandler struct {
 	tmpl *template.Template
 }
 
+type todoItemView struct {
+	domain.TodoItem
+	Order int64
+}
+
+func ToView(t domain.TodoItem) todoItemView {
+	order := t.CreatedAt.Unix()
+	if t.Done {
+		order = t.UpdatedAt.Unix()
+	}
+
+	return todoItemView{
+		t,
+		order,
+	}
+}
+
 func NewHTMXHandler(srv ports.TodoService, templatesDir string) (*HTMXHandler, error) {
 	//Parse templates
-	tmpl, err := template.ParseFS(tmplFs, "templates/*.html")
+	funcs := template.FuncMap(template.FuncMap{
+		"attr": func(s string) template.HTMLAttr {
+			return template.HTMLAttr(s)
+		},
+		"safe": func(s string) template.HTML {
+			return template.HTML(s)
+		},
+	})
+
+	tmpl, err := template.New("todo").Funcs(funcs).ParseFS(tmplFs, "templates/*.html")
 	if err != nil {
 		return nil, err
 	}
