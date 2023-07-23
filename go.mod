@@ -6,6 +6,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/libsql/libsql-client-go v0.0.0-20230710132643-6f49934b7fb3
 	gorm.io/driver/postgres v1.5.2
+	gorm.io/driver/sqlite v1.5.2
 	gorm.io/gorm v1.25.2
 )
 
@@ -22,6 +23,5 @@ require (
 	golang.org/x/crypto v0.8.0 // indirect
 	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
 	golang.org/x/text v0.9.0 // indirect
-	gorm.io/driver/sqlite v1.5.2 // indirect
 	nhooyr.io/websocket v1.8.7 // indirect
 )

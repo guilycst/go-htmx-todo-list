@@ -33,7 +33,7 @@ func ToView(t domain.TodoItem) todoItemView {
 	}
 }
 
-func NewHTMXHandler(srv ports.TodoService, templatesDir string) (*HTMXHandler, error) {
+func NewHTMXHandler(srv ports.TodoService) (*HTMXHandler, error) {
 	//Parse templates
 	funcs := template.FuncMap(template.FuncMap{
 		"attr": func(s string) template.HTMLAttr {

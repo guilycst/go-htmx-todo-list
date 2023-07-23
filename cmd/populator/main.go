@@ -17,12 +17,13 @@ var repository ports.TodoRepository
 
 func init() {
 
-	// Try to load .env file if any
-	loadenv.LoadEnv()
-
 	//Parse flags
 	populationFile := flag.String("file", "", "JSON file containing population")
+	env := flag.String("env", "", ".env file")
 	flag.Parse()
+
+	// Try to load .env file if any
+	loadenv.LoadEnv(env)
 
 	if populationFile == nil {
 		log.Fatal("No population file provided (flag -file)")

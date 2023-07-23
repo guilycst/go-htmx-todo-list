@@ -22,4 +22,5 @@ services:
     ports:
      - 8080:8080
     environment:
-     PG_CONN_STR: "host=db user=admin password=admin dbname=todo port=5432 sslmode=disable"
+     STORAGE: "POSTGRESQL"
+     CONN_STR: "host=db user=admin password=admin dbname=todo port=5432 sslmode=disable"

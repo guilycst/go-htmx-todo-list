@@ -1,17 +1,15 @@
 package loadenv
 
 import (
-	"os"
+	"flag"
 
 	"github.com/joho/godotenv"
 )
 
-func LoadEnv() {
-	l := len(os.Args)
-	if l > 1 {
-		var env = os.Args[l-1]
-		godotenv.Load(env)
-	} else {
-		godotenv.Load()
+func LoadEnv(env *string) {
+	flag.Parse()
+	if env == nil || *env == "" {
+		return
 	}
+	godotenv.Load(*env)
 }
