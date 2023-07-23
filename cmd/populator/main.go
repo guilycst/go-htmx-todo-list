@@ -6,23 +6,24 @@ import (
 	"log"
 	"os"
 
-	"github.com/guilycst/go-htmx/internal/adapters/repositories"
 	"github.com/guilycst/go-htmx/internal/core/domain"
 	"github.com/guilycst/go-htmx/internal/core/ports"
 	"github.com/guilycst/go-htmx/pkg/loadenv"
+	"github.com/guilycst/go-htmx/pkg/repo"
 )
 
 var population = []*domain.TodoItem{}
-var repository ports.Repository[domain.TodoItem]
+var repository ports.TodoRepository
 
 func init() {
 
-	// Try to load .env file if any
-	loadenv.LoadEnv()
-
 	//Parse flags
 	populationFile := flag.String("file", "", "JSON file containing population")
+	env := flag.String("env", "", ".env file")
 	flag.Parse()
+
+	// Try to load .env file if any
+	loadenv.LoadEnv(env)
 
 	if populationFile == nil {
 		log.Fatal("No population file provided (flag -file)")
@@ -41,15 +42,20 @@ func init() {
 	}
 
 	//Create new repository
-	var pgConnStr string = os.Getenv("PG_CONN_STR")
-	repository, err = repositories.NewTodoDBRepository[domain.TodoItem](pgConnStr)
+	var connStr string = os.Getenv("CONN_STR")
+	var storage repo.Storage = repo.StorageFromString(os.Getenv("STORAGE"))
+	//Create new repository
+	pRepository, err := repo.GetRepo(storage, connStr)
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	repository = *pRepository
 }
 
 func main() {
-	repository.SaveBatch(population)
+	err := repository.SaveBatch(population)
+	if err != nil {
+		log.Fatal(err)
+	}
 	log.Print("💾✔️ - Database populated!")
 }

@@ -14,7 +14,11 @@ func (hx *HTMXHandler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	found := hx.srv.FindById(id)
+	found, err := hx.srv.FindById(id)
+	if err != nil {
+		http.Error(w, "Failed to parse form", http.StatusInternalServerError)
+		return
+	}
 
 	if found == nil {
 		http.Error(w, fmt.Sprintf("id \"%d\" not found", id), http.StatusNotFound)
@@ -44,7 +48,7 @@ func (hx *HTMXHandler) Update(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	err = hx.tmpl.ExecuteTemplate(w, "list_item.html", *found)
+	err = hx.tmpl.ExecuteTemplate(w, "list_item.html", ToView(*found))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

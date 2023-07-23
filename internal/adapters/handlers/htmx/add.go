@@ -24,7 +24,7 @@ func (hx *HTMXHandler) AddHandleFunc(w http.ResponseWriter, r *http.Request) {
 		Description: r.Form.Get("description"),
 	}
 
-	err = hx.srv.Save(&item)
+	err = hx.srv.Create(&item)
 	if err != nil {
 		if err == todosrv.ErrorTitleRequired {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -33,7 +33,7 @@ func (hx *HTMXHandler) AddHandleFunc(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	err = hx.tmpl.ExecuteTemplate(w, "list_item.html", item)
+	err = hx.tmpl.ExecuteTemplate(w, "list_item.html", ToView(item))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

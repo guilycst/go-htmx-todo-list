@@ -1,28 +1,50 @@
 package htmx
 
 import (
+	"embed"
 	"html/template"
-	"path/filepath"
 
+	"github.com/guilycst/go-htmx/internal/core/domain"
 	"github.com/guilycst/go-htmx/internal/core/ports"
-	"github.com/guilycst/go-htmx/pkg/dirutil"
 )
+
+//go:embed templates
+var tmplFs embed.FS
 
 type HTMXHandler struct {
 	srv  ports.TodoService
 	tmpl *template.Template
 }
 
-func NewHTMXHandler(srv ports.TodoService, templatesDir string) (*HTMXHandler, error) {
+type todoItemView struct {
+	domain.TodoItem
+	Order int64
+}
 
-	err := dirutil.IsDir(templatesDir)
-	if err != nil {
-		return nil, err
+func ToView(t domain.TodoItem) todoItemView {
+	order := t.CreatedAt.Unix()
+	if t.Done {
+		order = t.UpdatedAt.Unix()
 	}
 
+	return todoItemView{
+		t,
+		order,
+	}
+}
+
+func NewHTMXHandler(srv ports.TodoService) (*HTMXHandler, error) {
 	//Parse templates
-	templatePattern := filepath.Join(templatesDir, "*.html")
-	tmpl, err := template.ParseGlob(templatePattern)
+	funcs := template.FuncMap(template.FuncMap{
+		"attr": func(s string) template.HTMLAttr {
+			return template.HTMLAttr(s)
+		},
+		"safe": func(s string) template.HTML {
+			return template.HTML(s)
+		},
+	})
+
+	tmpl, err := template.New("todo").Funcs(funcs).ParseFS(tmplFs, "templates/*.html")
 	if err != nil {
 		return nil, err
 	}

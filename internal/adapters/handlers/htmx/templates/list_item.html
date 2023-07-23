@@ -2,6 +2,7 @@
 {{ $checked := "" }}
 {{ $lineThrough := "" }}
 {{ $prepend := false }}
+{{ $order := printf "style=\"order: %d;\"" .Order }}
 {{ if .Done}}
 {{ $action = printf "/undone/%d" .ID }}
 {{ $checked = "checked" }}
@@ -9,12 +10,12 @@
 {{ $prepend = true }}
 {{end}}
 
-<li class="py-4 fade-me-out fade-me-in" id="list-item-{{.ID}}">
+<li class="py-4 fade-me-out fade-me-in" {{ $order|attr }} id="list-item-{{.ID}}">
     <div class="flex items-center">
         <input id="list-item-check-{{.ID}}" name="todo1" type="checkbox"
             class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded" hx-post="{{$action}}"
             hx-target="#list-item-{{.ID}}" hx-swap="outerHTML settle:0.25s"
-            hx-on="htmx:afterRequest: moveElement('list-item-{{.ID}}', 'list', {{$prepend}})" {{$checked}}>
+            {{$checked}}>
         <label for="list-item-check-{{.ID}}" class="ml-3 block text-gray-900 grow">
             <span class="text-lg font-medium {{$lineThrough}}">{{.Title}}</span>
             <span class="text-sm font-light text-gray-500 {{$lineThrough}}">{{.Description}}</span>

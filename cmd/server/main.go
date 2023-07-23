@@ -1,32 +1,37 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/guilycst/go-htmx/internal/adapters/handlers/fileserver"
 	"github.com/guilycst/go-htmx/internal/adapters/handlers/htmx"
-	"github.com/guilycst/go-htmx/internal/adapters/repositories"
-	"github.com/guilycst/go-htmx/internal/core/domain"
+
+	_ "time/tzdata"
+
 	"github.com/guilycst/go-htmx/internal/core/services/todosrv"
 	"github.com/guilycst/go-htmx/pkg/loadenv"
+	"github.com/guilycst/go-htmx/pkg/repo"
 )
 
 func init() {
 
+	//Parse flags
+	env := flag.String("env", "", ".env file")
+	flag.Parse()
+
 	// Try to load .env file if any
-	loadenv.LoadEnv()
+	loadenv.LoadEnv(env)
 
 	var (
-		pgConnStr string = os.Getenv("PG_CONN_STR")
-		tmplDir   string = os.Getenv("TEMPLATES_DIR")
-		distDir   string = os.Getenv("DIST_DIR")
-		pubDir    string = os.Getenv("PUB_DIR")
+		storage repo.Storage = repo.StorageFromString(os.Getenv("STORAGE"))
+		connStr string       = os.Getenv("CONN_STR")
 	)
 
 	//Create new repository
-	repository, err := repositories.NewTodoDBRepository[domain.TodoItem](pgConnStr)
+	repository, err := repo.GetRepo(storage, connStr)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -35,7 +40,7 @@ func init() {
 	srv := todosrv.New(repository)
 
 	//Initialize http handlers
-	handler, err := htmx.NewHTMXHandler(srv, tmplDir)
+	handler, err := htmx.NewHTMXHandler(srv)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -49,17 +54,17 @@ func init() {
 	http.HandleFunc("/edit/", handler.Edit)
 	http.HandleFunc("/update/", handler.Update)
 
-	distFsh, err := fileserver.NewFileServerHandler(distDir)
+	distFsh, err := fileserver.NewFileServerHandler("./dist")
 	if err != nil {
 		log.Fatal(err)
 	}
 	http.HandleFunc("/dist/", distFsh)
 
-	pubFsh, err := fileserver.NewFileServerHandler(pubDir)
+	assetsFsh, err := fileserver.NewFileServerHandler("./assets")
 	if err != nil {
 		log.Fatal(err)
 	}
-	http.HandleFunc("/public/", pubFsh)
+	http.HandleFunc("/assets/", assetsFsh)
 }
 
 func main() {

@@ -28,3 +28,9 @@ tmp
 
 #postgres local volume
 pg-data
+
+#sqlite3 db files
+*.db
+
+#env files
+*.env
