@@ -48,7 +48,7 @@ Then run the Make file:
 
 ```$ make run```
 
-#### Everithing on Docker
+#### Everything on Docker
 
 ```$ docker compose up```
 
